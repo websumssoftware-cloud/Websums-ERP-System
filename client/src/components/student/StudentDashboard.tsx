@@ -330,36 +330,109 @@ export const StudentDashboard: React.FC = () => {
 
       {/* LECTURES & NOTES TAB */}
       {activeTab === 'lectures' && (
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          {recordedLectures.length === 0 ? (
-            <div className="col-span-1 md:col-span-3 text-center py-12 bg-slate-50/50 rounded-2xl border border-slate-200/50">
-               <Video className="w-12 h-12 text-slate-300 mx-auto mb-3" />
-               <h4 className="text-sm font-bold text-slate-600">No recorded lectures available</h4>
-               <p className="text-xs text-slate-400 mt-1">Your mentor will upload class recordings here soon.</p>
-            </div>
-          ) : (
-            recordedLectures.map((lec) => (
-              <div key={lec.id} className="bg-white rounded-2xl border border-slate-200 shadow-card overflow-hidden flex flex-col justify-between">
-                <div className="relative">
-                  <img src={lec.thumbnailUrl} alt={lec.title} className="w-full h-36 object-cover" />
-                  <button
-                    onClick={() => setPlayingVideo(lec.videoUrl)}
-                    className="absolute inset-0 m-auto w-12 h-12 rounded-full bg-blue-600/90 text-white flex items-center justify-center shadow-lg hover:scale-110 transition-transform"
-                  >
-                    <Play className="w-5 h-5 ml-0.5" />
-                  </button>
-                </div>
-                <div className="p-4 space-y-2 text-xs">
-                  <span className="text-[10px] font-bold text-blue-600 bg-blue-50 px-2 py-0.5 rounded">Week {lec.week}</span>
-                  <h4 className="font-bold text-slate-900">{lec.title}</h4>
-                  <div className="flex justify-between text-slate-400 text-[11px] pt-2 border-t border-slate-100">
-                    <span>Duration: {lec.duration}</span>
-                    <span>{lec.viewsCount} Views</span>
-                  </div>
-                </div>
+        <div className="space-y-8">
+          
+          {/* Section 1: Live Interactive Classes (Zoom / Google Meet) */}
+          <div className="bg-white rounded-3xl border border-slate-200 shadow-card p-6 space-y-4">
+            <div className="flex items-center justify-between border-b border-slate-100 pb-3">
+              <div>
+                <h3 className="text-base font-black text-slate-900 tracking-tight flex items-center space-x-2">
+                  <span className="w-2.5 h-2.5 rounded-full bg-red-500 animate-pulse"></span>
+                  <span>Live Interactive Classes (Zoom & Google Meet)</span>
+                </h3>
+                <p className="text-xs text-slate-500 font-medium">Join live instructor sessions and interactive Q&A</p>
               </div>
-            ))
-          )}
+              <span className="text-xs font-extrabold text-blue-700 bg-blue-50 px-3 py-1 rounded-xl border border-blue-200/80">
+                {liveClasses.length} Active Classes
+              </span>
+            </div>
+
+            {liveClasses.length === 0 ? (
+              <div className="text-center py-6 bg-slate-50/60 rounded-2xl border border-slate-100">
+                <p className="text-xs font-semibold text-slate-500">No live classes scheduled right now.</p>
+              </div>
+            ) : (
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                {liveClasses.map((lc) => (
+                  <div key={lc.id} className="p-4 bg-slate-50 rounded-2xl border border-slate-200 hover:border-blue-300 transition-all flex flex-col justify-between space-y-3">
+                    <div className="space-y-1.5">
+                      <div className="flex items-center justify-between">
+                        <span className={`text-[10px] font-extrabold px-2.5 py-1 rounded-lg border ${
+                          lc.meetingPlatform === 'Zoom' ? 'bg-sky-100 text-sky-800 border-sky-200' : 'bg-rose-100 text-rose-800 border-rose-200'
+                        }`}>
+                          {lc.meetingPlatform === 'Zoom' ? '🔷 Zoom Meeting' : '🔴 Google Meet'}
+                        </span>
+                        <span className="text-[10px] font-bold text-slate-500">{lc.batch}</span>
+                      </div>
+                      <h4 className="font-extrabold text-slate-900 text-xs">{lc.title}</h4>
+                      <p className="text-[11px] text-slate-600 font-medium">Mentor: {lc.mentorName} • 🕒 {lc.date} at {lc.time}</p>
+                    </div>
+
+                    <a
+                      href={lc.meetingUrl}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="w-full py-2.5 text-xs font-extrabold text-white bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 rounded-xl shadow-md transition-all flex items-center justify-center space-x-1.5"
+                    >
+                      <Video className="w-4 h-4" />
+                      <span>Join Live {lc.meetingPlatform} Class</span>
+                    </a>
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+
+          {/* Section 2: Recorded Video Lectures & Materials */}
+          <div className="bg-white rounded-3xl border border-slate-200 shadow-card p-6 space-y-4">
+            <div className="border-b border-slate-100 pb-3">
+              <h3 className="text-base font-black text-slate-900 tracking-tight flex items-center space-x-2">
+                <Play className="w-4 h-4 text-orange-500 fill-orange-500" />
+                <span>Recorded Video Lectures & Study Materials ({recordedLectures.length})</span>
+              </h3>
+              <p className="text-xs text-slate-500 font-medium">Watch past class recordings, Google Drive links, and YouTube video tutorials</p>
+            </div>
+
+            {recordedLectures.length === 0 ? (
+              <div className="text-center py-12 bg-slate-50/50 rounded-2xl border border-slate-200/50">
+                 <Video className="w-12 h-12 text-slate-300 mx-auto mb-3" />
+                 <h4 className="text-sm font-bold text-slate-600">No recorded lectures available yet</h4>
+                 <p className="text-xs text-slate-400 mt-1">Your mentor will upload class recordings here soon.</p>
+              </div>
+            ) : (
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                {recordedLectures.map((lec) => (
+                  <div key={lec.id} className="bg-slate-50 rounded-2xl border border-slate-200 shadow-sm hover:shadow-md transition-all overflow-hidden flex flex-col justify-between group">
+                    <div className="relative">
+                      <img src={lec.thumbnailUrl} alt={lec.title} className="w-full h-36 object-cover group-hover:scale-105 transition-transform duration-300" />
+                      <button
+                        onClick={() => setPlayingVideo(lec.videoUrl)}
+                        className="absolute inset-0 m-auto w-12 h-12 rounded-full bg-orange-600/90 text-white flex items-center justify-center shadow-lg hover:scale-110 transition-transform"
+                      >
+                        <Play className="w-5 h-5 ml-0.5 fill-white" />
+                      </button>
+                    </div>
+                    <div className="p-4 space-y-2 text-xs bg-white flex-1 flex flex-col justify-between">
+                      <div>
+                        <span className="text-[10px] font-bold text-orange-700 bg-orange-50 px-2 py-0.5 rounded border border-orange-100">Week {lec.week}</span>
+                        <h4 className="font-bold text-slate-900 mt-1">{lec.title}</h4>
+                      </div>
+                      <div className="flex items-center justify-between text-slate-500 text-[11px] pt-2 border-t border-slate-100 mt-2">
+                        <span>Duration: {lec.duration}</span>
+                        <button
+                          onClick={() => setPlayingVideo(lec.videoUrl)}
+                          className="font-extrabold text-orange-600 hover:text-orange-700 underline"
+                        >
+                          Watch Video ▶
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+
         </div>
       )}
 

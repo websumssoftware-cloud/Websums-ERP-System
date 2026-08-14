@@ -1162,8 +1162,8 @@ export const MentorDashboard: React.FC = () => {
                   <Video className="w-5 h-5 text-white drop-shadow-md" />
                 </div>
                 <div>
-                  <h3 className="font-black text-lg drop-shadow-md">Schedule Live Class</h3>
-                  <p className="text-[11px] font-medium text-white/90 drop-shadow-sm">Host a new interactive session</p>
+                  <h3 className="font-black text-lg drop-shadow-md">Schedule Live Interactive Class</h3>
+                  <p className="text-[11px] font-medium text-white/90 drop-shadow-sm">Host via Zoom, Google Meet, or Teams</p>
                 </div>
               </div>
               <button 
@@ -1180,7 +1180,7 @@ export const MentorDashboard: React.FC = () => {
                 <input
                   type="text"
                   required
-                  placeholder="e.g. Q&A Session for React Hooks"
+                  placeholder="e.g. Live Q&A & Code Review Session"
                   value={newLiveClass.title}
                   onChange={(e) => setNewLiveClass({ ...newLiveClass, title: e.target.value })}
                   className="w-full px-4 py-3 rounded-xl border border-slate-200 bg-slate-50 focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all font-semibold text-slate-900 placeholder:text-slate-400 placeholder:font-medium shadow-sm"
@@ -1212,23 +1212,23 @@ export const MentorDashboard: React.FC = () => {
 
               <div className="grid grid-cols-2 gap-5">
                 <div>
-                  <label className="block text-xs font-extrabold text-slate-700 mb-2 uppercase tracking-wide">Platform <span className="text-rose-500">*</span></label>
+                  <label className="block text-xs font-extrabold text-slate-700 mb-2 uppercase tracking-wide">Meeting Platform <span className="text-rose-500">*</span></label>
                   <select
                     value={newLiveClass.meetingPlatform}
                     onChange={(e) => setNewLiveClass({ ...newLiveClass, meetingPlatform: e.target.value as any })}
                     className="w-full px-4 py-3 rounded-xl border border-slate-200 bg-slate-50 focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all font-semibold text-slate-900 appearance-none shadow-sm cursor-pointer"
                   >
-                    <option value="Zoom">Zoom</option>
-                    <option value="Google Meet">Google Meet</option>
-                    <option value="Microsoft Teams">Microsoft Teams</option>
+                    <option value="Zoom">🔷 Zoom Meeting</option>
+                    <option value="Google Meet">🔴 Google Meet</option>
+                    <option value="Microsoft Teams">🟣 Microsoft Teams</option>
                   </select>
                 </div>
                 <div>
-                  <label className="block text-xs font-extrabold text-slate-700 mb-2 uppercase tracking-wide">Meeting Link <span className="text-rose-500">*</span></label>
+                  <label className="block text-xs font-extrabold text-slate-700 mb-2 uppercase tracking-wide">Live Join Link <span className="text-rose-500">*</span></label>
                   <input
                     type="url"
                     required
-                    placeholder="https://zoom.us/j/..."
+                    placeholder={newLiveClass.meetingPlatform === 'Zoom' ? "https://zoom.us/j/..." : "https://meet.google.com/..."}
                     value={newLiveClass.meetingUrl}
                     onChange={(e) => setNewLiveClass({ ...newLiveClass, meetingUrl: e.target.value })}
                     className="w-full px-4 py-3 rounded-xl border border-slate-200 bg-slate-50 focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all font-semibold text-slate-900 placeholder:text-slate-400 placeholder:font-medium shadow-sm"
@@ -1257,7 +1257,7 @@ export const MentorDashboard: React.FC = () => {
         </div>
       )}
 
-      {/* UPLOAD MATERIAL MODAL */}
+      {/* UPLOAD RECORDED LECTURE / MATERIAL MODAL */}
       {showUploadModal && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
           <div 
@@ -1272,8 +1272,8 @@ export const MentorDashboard: React.FC = () => {
                   <Upload className="w-5 h-5 text-white drop-shadow-md" />
                 </div>
                 <div>
-                  <h3 className="font-black text-lg drop-shadow-md">Upload Material</h3>
-                  <p className="text-[11px] font-medium text-white/90 drop-shadow-sm">Share lectures or notes with students</p>
+                  <h3 className="font-black text-lg drop-shadow-md">Upload Recorded Video & Notes</h3>
+                  <p className="text-[11px] font-medium text-white/90 drop-shadow-sm">Add Google Drive, YouTube, Loom, or MP4 video links</p>
                 </div>
               </div>
               <button 
@@ -1284,38 +1284,58 @@ export const MentorDashboard: React.FC = () => {
               </button>
             </div>
             
-            <form onSubmit={handleUploadNote} className="p-6 space-y-5 text-sm">
+            <form onSubmit={handleUploadNote} className="p-6 space-y-4 text-sm">
               <div>
-                <label className="block text-xs font-extrabold text-slate-700 mb-2 uppercase tracking-wide">Lecture / Notes Title <span className="text-rose-500">*</span></label>
+                <label className="block text-xs font-extrabold text-slate-700 mb-1.5 uppercase tracking-wide">Lecture / Video Title <span className="text-rose-500">*</span></label>
                 <input
                   type="text"
                   required
-                  placeholder="e.g. Week 5: Advanced Mongoose Aggregation & Pipeline"
+                  placeholder="e.g. Week 5: Advanced Mongoose Aggregation & Pipelines"
                   value={newNote.title}
                   onChange={(e) => setNewNote({ ...newNote, title: e.target.value })}
                   className="w-full px-4 py-3 rounded-xl border border-slate-200 bg-slate-50 focus:bg-white focus:outline-none focus:ring-2 focus:ring-orange-500/20 focus:border-orange-500 transition-all font-semibold text-slate-900 placeholder:text-slate-400 placeholder:font-medium shadow-sm"
                 />
               </div>
 
-              <div>
-                <label className="block text-xs font-extrabold text-slate-700 mb-2 uppercase tracking-wide">Domain <span className="text-rose-500">*</span></label>
-                <input
-                  type="text"
-                  readOnly
-                  value={newNote.domain}
-                  className="w-full px-4 py-3 rounded-xl border border-slate-200 bg-slate-100 text-slate-600 font-bold shadow-sm"
-                />
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-xs font-extrabold text-slate-700 mb-1.5 uppercase tracking-wide">Domain</label>
+                  <input
+                    type="text"
+                    readOnly
+                    value={newNote.domain}
+                    className="w-full px-4 py-3 rounded-xl border border-slate-200 bg-slate-100 text-slate-600 font-bold shadow-sm"
+                  />
+                </div>
+                <div>
+                  <label className="block text-xs font-extrabold text-slate-700 mb-1.5 uppercase tracking-wide">Week Number</label>
+                  <select
+                    value={newNote.week}
+                    onChange={(e) => setNewNote({ ...newNote, week: parseInt(e.target.value) || 1 })}
+                    className="w-full px-4 py-3 rounded-xl border border-slate-200 bg-slate-50 focus:bg-white font-bold text-slate-800 shadow-sm cursor-pointer"
+                  >
+                    {[1,2,3,4,5,6,7,8,9,10,11,12].map(w => (
+                      <option key={w} value={w}>Week {w}</option>
+                    ))}
+                  </select>
+                </div>
               </div>
 
               <div>
-                <label className="block text-xs font-extrabold text-slate-700 mb-2 uppercase tracking-wide">Resource / Video URL <span className="text-rose-500">*</span></label>
+                <label className="block text-xs font-extrabold text-slate-700 mb-1.5 uppercase tracking-wide">
+                  Recorded Video URL <span className="text-rose-500">*</span>
+                </label>
                 <input
                   type="url"
-                  placeholder="https://drive.google.com/... or YouTube link"
+                  required
+                  placeholder="Paste Google Drive, YouTube, Loom, Vimeo or .mp4 link..."
                   value={newNote.link}
                   onChange={(e) => setNewNote({ ...newNote, link: e.target.value })}
                   className="w-full px-4 py-3 rounded-xl border border-slate-200 bg-slate-50 focus:bg-white focus:outline-none focus:ring-2 focus:ring-orange-500/20 focus:border-orange-500 transition-all font-semibold text-slate-900 placeholder:text-slate-400 placeholder:font-medium shadow-sm"
                 />
+                <p className="text-[11px] text-slate-500 mt-1 font-medium">
+                  💡 Supports Google Drive ("Anyone with link"), YouTube, Loom, Vimeo, or direct MP4 files.
+                </p>
               </div>
 
               <div className="pt-4 flex items-center justify-end space-x-3 border-t border-slate-100 mt-4">
@@ -1331,7 +1351,7 @@ export const MentorDashboard: React.FC = () => {
                   className="px-6 py-2.5 text-sm font-extrabold text-white bg-orange-500 hover:bg-orange-600 rounded-xl shadow-md transition-all active:scale-95 flex items-center space-x-1.5"
                 >
                   <Upload className="w-4 h-4 stroke-[3]" />
-                  <span>Publish Material</span>
+                  <span>Publish Recorded Video</span>
                 </button>
               </div>
             </form>
